@@ -1,0 +1,6 @@
+---
+- name: Windows playbook
+  hosts: win
+  tasks:
+    - name: Ping
+      ansible.windows.win_ping:
