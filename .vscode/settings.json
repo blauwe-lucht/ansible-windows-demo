@@ -45,7 +45,7 @@
         },
         "node2 (vagrant ssh)": {
             "path": "powershell",
-            "args": ["-NoLogo", "-Command", "vagrant ssh node1"],
+            "args": ["-NoLogo", "-Command", "vagrant ssh node2"],
             "icon": "terminal-powershell",
             "overrideName": true
         },
