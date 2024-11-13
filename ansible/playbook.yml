@@ -9,3 +9,10 @@
         src: helloworld.txt
         dest: C:\Users\vagrant\
 
+    # Before running this task, make sure you downloaded the exe to files/packages.
+    - name: Install Notepad++
+      ansible.windows.win_package:
+        path: http://192.168.9.26/npp.8.7.1.Installer.x64.exe
+        product_id: Notepad++
+        arguments: /S
+      tags: notepadplusplus

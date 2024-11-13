@@ -20,11 +20,36 @@ Vagrant.configure("2") do |config|
         # when using private keys to connect to a VM).
         acs.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=700,fmode=600"]
 
+        # Nginx needs to be able to access files and directories in ansible/files/packages,
+        # so share that with default permissions.
+        acs.vm.synced_folder "ansible/files/packages", "/opt/ansible-packages"
+
         # Do the initial setup of the ACS (Ansible Control Server) with a script.
         acs.vm.provision "shell" do |shell|
             shell.inline = <<-SHELL
                 set -euxo pipefail
-                
+
+                echo Installing prerequisites for Docker...
+                dnf install -y dnf-plugins-core
+
+                echo Adding Docker repository...
+                dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+                echo Installing Docker...
+                dnf install -y docker-ce docker-ce-cli containerd.io
+
+                echo Starting and enabling Docker...
+                systemctl start docker
+                systemctl enable docker
+
+                if [ ! "$(docker ps -q -f name=nginx)" ]; then
+                    echo Starting Nginx...
+                    docker run --name lighttpd -d -p 80:80 \
+                        -v /opt/ansible-packages:/var/www/html:ro \
+                        --restart unless-stopped \
+                        jitesoft/lighttpd
+                fi
+                    
                 # Pip prefers to run in a virtual environment, so we create one for the vagrant user
                 # and use that pip to install ansible and ansible-lint.
                 sudo -u vagrant bash -c '
