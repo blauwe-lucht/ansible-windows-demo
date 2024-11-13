@@ -4,3 +4,8 @@
   tasks:
     - name: Ping
       ansible.windows.win_ping:
+    - name: Copy file
+      ansible.windows.win_copy:
+        src: helloworld.txt
+        dest: C:\Users\vagrant\
+
