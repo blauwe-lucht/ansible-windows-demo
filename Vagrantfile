@@ -47,6 +47,10 @@ Vagrant.configure("2") do |config|
         node1.vm.hostname = "node1"
         node1.vm.network "private_network", ip: "192.168.9.27"
         node1.vm.network "forwarded_port", id: "ssh", guest: 22, host: 2927
+        node1.vm.provider "virtualbox" do |vb|
+            vb.memory = "3072"  # 3 GB of RAM
+            vb.cpus = 2
+        end
     end
 
     config.vm.define "node2" do |node2|
@@ -54,5 +58,9 @@ Vagrant.configure("2") do |config|
         node2.vm.hostname = "node2"
         node2.vm.network "private_network", ip: "192.168.9.28"
         node2.vm.network "forwarded_port", id: "ssh", guest: 22, host: 2928
+        node2.vm.provider "virtualbox" do |vb|
+            vb.memory = "3072"
+            vb.cpus = 2
+        end
     end
 end
