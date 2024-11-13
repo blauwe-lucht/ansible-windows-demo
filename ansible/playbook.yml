@@ -1,6 +1,8 @@
 ---
 - name: Windows playbook
   hosts: win
+  vars:
+    - acs_ip: "192.168.9.26"
   tasks:
     - name: Ping
       ansible.windows.win_ping:
@@ -9,10 +11,16 @@
         src: helloworld.txt
         dest: C:\Users\vagrant\
 
-    # Before running this task, make sure you downloaded the exe to files/packages.
+    # Normally we could use win_chocolatey to install software. However when there
+    # is a restricive firewall, or no internet access at all, we need to be able to
+    # download the installer from within the network.
+    # In this demo we fake it by running a webserver on the acs (192.168.9.26).
+    # However this requires that you first downloaded the exe to files/packages, it
+    # is accessible by the webserver through a VirtualBox synced folder, see the
+    # Vagrantfile.
     - name: Install Notepad++
       ansible.windows.win_package:
-        path: http://192.168.9.26/npp.8.7.1.Installer.x64.exe
+        path: http://{{ acs_ip }}/npp.8.7.1.Installer.x64.exe
         product_id: Notepad++
         arguments: /S
       tags: notepadplusplus
