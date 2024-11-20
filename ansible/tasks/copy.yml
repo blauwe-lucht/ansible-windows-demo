@@ -1,0 +1,22 @@
+---
+- name: Copy file
+  ansible.windows.win_copy:
+    src: helloworld.txt
+    dest: C:\Users\vagrant\
+
+- name: Copy and expand template
+  ansible.windows.win_template:
+    src: helloworldtemplate.txt.j2
+    dest: C:\Users\vagrant\helloworldtemplate.txt
+
+- name: Copy and expand multiple templates
+  ansible.windows.win_template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - src: helloworld_loop1.txt.j2
+      dest: C:\Users\vagrant\helloworld_loop1.txt
+    - src: helloworld_loop2.txt.j2
+      dest: C:\Users\vagrant\helloworld_loop2.txt
+  loop_control:
+    label: "{{ item.src }}"

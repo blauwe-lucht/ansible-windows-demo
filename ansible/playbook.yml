@@ -4,13 +4,13 @@
   gather_facts: false
   vars:
     acs_ip: "192.168.9.26"
+    install_notepadplusplus: false
   tasks:
     - name: Ping
       ansible.windows.win_ping:
-    - name: Copy file
-      ansible.windows.win_copy:
-        src: helloworld.txt
-        dest: C:\Users\vagrant\
+
+    - name: Copy files
+      ansible.builtin.import_tasks: tasks/copy.yml
 
     # Normally we could use win_chocolatey to install software. However when there
     # is a restricive firewall, or no internet access at all, we need to be able to
@@ -30,4 +30,5 @@
         # Figuring out which arguments to use for a silent installation can be a challenge.
         # I found this by googling:
         arguments: /S
+      when: install_notepadplusplus
       tags: notepadplusplus
