@@ -65,6 +65,11 @@ Vagrant.configure("2") do |config|
                 '
             SHELL
         end
+        acs.vm.provider "virtualbox" do |vb|
+            # Default is 1 GB, this is too small for ansible-lint.
+            vb.memory = "2048"
+            vb.cpus = 2
+        end
     end
 
     config.vm.define "node1" do |node1|
